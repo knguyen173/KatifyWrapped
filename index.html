@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Our Year Wrapped ❤️</title>
+    <title>Katify Wrapped ❤️</title>
     <style>
         /* Unified Global Styles */
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
@@ -139,7 +140,7 @@
         @keyframes auraWave { 0% { background-position: 0% 50%; } 100% { background-position: 100% 50%; } }
         .aura-title { font-size: 1.4rem; font-weight: bold; letter-spacing: 1px; color: #5a4b48; text-transform: uppercase; }
         .aura-subtitle { font-size: 2.2rem; font-weight: 800; color: #8c6b63; margin-top: 10px; text-shadow: 0 2px 10px rgba(255,255,255,0.4); }
-        .subtext-romantic { font-size: 0.95rem; italic; line-height: 1.6; padding: 0 10px; color: #5c4e4c; }
+        .subtext-romantic { font-size: 0.95rem; font-style: italic; line-height: 1.6; padding: 0 10px; color: #5c4e4c; }
 
         /* Card 9: Spotify Wrapped Summary Screen */
         #card-9 { background-color: #8c6b63; color: white; padding: 30px 20px; }
@@ -169,7 +170,7 @@
     <!-- CARD 1: WATCHLIST (DRAG & DROP) -->
     <div class="card" id="card-1">
         <h2>Our Watchlist 📺</h2>
-        <p>We spent a lot of time sharing screens this year. Drag these to rank your top 3 at the very top!</p>
+        <p>We've watched a lot of shows together this year. Drag these to rank your top 3 at the very top!</p>
         <div class="list-container" id="show-list-container"></div>
         <button class="btn" id="show-submit-btn" onclick="submitShowRanking()">Lock in Top 3</button>
     </div>
@@ -197,8 +198,8 @@
         <p>Let's look at those stats...</p>
         <div class="stats-container">
             <div class="stat-row"><span class="stat-label">Days Together 📅</span><span class="stat-value" id="stat-days-together">0</span></div>
+            <div class="stat-row"><span class="stat-label">Butt Dials 📱</span><span class="stat-value" id="stat-butt-dials">0</span></div>
             <div class="stat-row"><span class="stat-label">Kisses Shared 😘</span><span class="stat-value" id="stat-kisses">0</span></div>
-            <div class="stat-row"><span class="stat-label">Cuddle Hours 🛌</span><span class="stat-value" id="stat-cuddles">0</span></div>
             <div class="stat-row"><span class="stat-label">Official Dates 🌹</span><span class="stat-value" id="stat-dates">0</span></div>
         </div>
         <button class="btn" id="stats-next-btn" style="display:none;" onclick="nextCard()">Keep Going ✨</button>
@@ -207,7 +208,7 @@
     <!-- CARD 5: VACATIONS -->
     <div class="card" id="card-5">
         <h2>Our Getaways ✈️</h2>
-        <p>From exploring California to the breezy beaches of Hawaii...</p>
+        <p>"Santa Cruz is basically just Hawaii at home, amiright?" - Kat</p>
         <div class="map-area">
             <div class="map-dot dot-ca"></div><div class="label-ca">California</div>
             <div class="map-dot dot-hi"></div><div class="label-hi">Hawaii</div>
@@ -284,7 +285,8 @@
                     <span class="sum-val">The Perfect One</span>
                 </div>
             </div>
-            
+            <button class="btn" style="background: white; color: #8c6b63; margin-top: 20px;" onclick="downloadWrapped()">Save & Share 📸</button>
+
             <p style="color: white; margin-top: 30px; font-weight: 300; font-size: 1.3rem;">Happy Anniversary! ❤️</p>
         </div>
     </div>
@@ -508,9 +510,9 @@
         setTimeout(() => {
             // Animates up to our internally calculated days together value
             animateValue("stat-days-together", 0, calculatedDays, 1400); 
-            animateValue("stat-kisses", 0, 100, 1400);
-            animateValue("stat-cuddles", 0, 100, 1400); 
-            animateValue("stat-dates", 0, 100, 1400, true);
+            animateValue("stat-butt-dials", 0, 5, 1400);
+            animateValue("stat-kisses", 0, 1000, 1400); 
+            animateValue("stat-dates", 0, 20, 1400, true);
         }, 1000);
     }
     function animateValue(id, start, end, duration, last = false) {
@@ -670,6 +672,23 @@
         setTimeout(() => {
             document.getElementById('finale-next-btn').style.display = "block";
         }, 4500);
+    }
+
+    // --- CARD 9: DOWNLOAD WRAPPED SUMMARY ---
+    async function downloadWrapped() {
+        const canvas = await html2canvas(document.getElementById('card-9'));
+        canvas.toBlob(async (blob) => {
+            const file = new File([blob], "Katify-Wrapped.png", { type: "image/png" });
+            if (navigator.share && navigator.canShare({ files: [file] })) {
+                await navigator.share({ files: [file], title: 'My Wrapped' });
+            } else {
+                // Fallback: Just trigger the download
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = 'Katify-Wrapped.png';
+                link.click();
+            }
+        });
     }
 </script>
 
