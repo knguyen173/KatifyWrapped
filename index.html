@@ -4,8 +4,23 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     
     <!-- Mobile Drag and Drop Polyfill -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/drag-drop-touch/1.13.0/drag-drop-touch.esm.min.js" type="module"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/drag-drop-touch/1.13.0/drag-drop-touch.providers.min.js" nomodule></script>
+    <script src="https://cdn.jsdelivr.net/npm/mobile-drag-drop@2.3.0-rc.2/index.min.js"></script>
+    <script>
+        // Force the polyfill to activate on mobile devices
+        MobileDragDrop.polyfill({
+            // Requires the user to hold the item for 200ms before it starts dragging.
+            // This prevents accidental dragging when they are just trying to scroll!
+            holdToDrag: 200
+        });
+
+        // iOS Safari fix: strictly prevent screen scrolling while an item is being dragged
+        window.addEventListener('touchmove', function(event) {
+            // If the polyfill is active, stop the screen from moving
+            if (document.querySelector('.dnd-poly-drag-image')) {
+                event.preventDefault();
+            }
+        }, { passive: false });
+    </script>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -169,7 +184,7 @@
 
     <!-- CARD 0: TITLE -->
     <div class="card active" id="card-0">
-        <h1>Our First Year</h1>
+        <h1>Welcome to Katify Wrapped</h1>
         <p>A little look back at the past 365 days of us. Ready?</p>
         <button class="btn" onclick="nextCard()">Let's go ❤️</button>
     </div>
