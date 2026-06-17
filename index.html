@@ -2,6 +2,11 @@
 <html lang="en">
 <head>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
+    <!-- Mobile Drag and Drop Polyfill -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/drag-drop-touch/1.13.0/drag-drop-touch.esm.min.js" type="module"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/drag-drop-touch/1.13.0/drag-drop-touch.providers.min.js" nomodule></script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Katify Wrapped ❤️</title>
@@ -50,6 +55,7 @@
             padding: 10px 15px; border: 2px solid #e8dedb; background: white; border-radius: 12px;
             cursor: grab; display: flex; justify-content: space-between; align-items: center;
             font-size: 0.95rem; transition: transform 0.2s, box-shadow 0.2s;
+            touch-action: none; /* Mobile scroll fix */
         }
         .draggable-show:active { cursor: grabbing; }
         .draggable-show.dragging {
@@ -109,6 +115,7 @@
         .draggable-photo {
             width: 100%; height: 85px; background-size: cover; background-position: center; border-radius: 6px; cursor: grab;
             border: 3px solid white; box-shadow: 0 4px 8px rgba(0,0,0,0.1); image-rendering: -webkit-optimize-contrast; image-rendering: pixelated;
+            touch-action: none; /* Mobile scroll fix */
         }
         .polaroid-slot .draggable-photo { width: 100%; height: 75px; position: absolute; top: 8px; left: 0; right: 0; margin: auto; max-width: 90%; z-index: 2; border-width: 2px;}
 
@@ -177,7 +184,7 @@
 
     <!-- CARD 2: GUESS WHO -->
     <div class="card" id="card-2">
-        <h2>Guess Who Said/Did It 🤔</h2>
+        <h2>Guess Who 🤔</h2>
         <p>No, we aren't talking about the bathroom incident...</p>
         <div class="quiz-container">
             <div id="guess-who-content"></div>
@@ -587,7 +594,13 @@
         pool.removeEventListener('drop', poolDrop);
         pool.addEventListener('drop', poolDrop);
 
-        function photoDragStart(e) { e.dataTransfer.setData('text/plain', e.target.id); }
+        function photoDragStart(e) { 
+            e.dataTransfer.setData('text/plain', e.target.id); 
+            // Helps mobile safari lock onto the item data securely
+            if(e.dataTransfer.setDragImage) {
+                e.dataTransfer.setDragImage(e.target, 0, 0);
+            }
+        }
         function slotDragOver(e) { e.preventDefault(); } 
         
         function slotDrop(e) {
