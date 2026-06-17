@@ -3,19 +3,16 @@
 <head>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     
-    <!-- Mobile Drag and Drop Polyfill -->
     <script src="https://cdn.jsdelivr.net/npm/mobile-drag-drop@2.3.0-rc.2/index.min.js"></script>
     <script>
         // Force the polyfill to activate on mobile devices
         MobileDragDrop.polyfill({
-            // Requires the user to hold the item for 200ms before it starts dragging.
-            // This prevents accidental dragging when they are just trying to scroll!
-            holdToDrag: 200
+            // Dropped to 50ms so it feels instant!
+            holdToDrag: 50
         });
 
         // iOS Safari fix: strictly prevent screen scrolling while an item is being dragged
         window.addEventListener('touchmove', function(event) {
-            // If the polyfill is active, stop the screen from moving
             if (document.querySelector('.dnd-poly-drag-image')) {
                 event.preventDefault();
             }
@@ -70,13 +67,20 @@
             padding: 10px 15px; border: 2px solid #e8dedb; background: white; border-radius: 12px;
             cursor: grab; display: flex; justify-content: space-between; align-items: center;
             font-size: 0.95rem; transition: transform 0.2s, box-shadow 0.2s;
-            touch-action: none; /* Mobile scroll fix */
+            touch-action: none; 
+            -webkit-touch-callout: none; /* Stops the blue text selection popup */
+            -webkit-user-select: none;
+            user-select: none;
         }
         .draggable-show:active { cursor: grabbing; }
         .draggable-show.dragging {
             opacity: 0.9; background-color: #fce6e2; border-color: #d4b2a7;
             transform: scale(1.03); box-shadow: 0 5px 15px rgba(212, 178, 167, 0.4); z-index: 10;
         }
+        
+        /* Stop the inner text/handle from blocking the drag calculations */
+        .show-content, .drag-handle { pointer-events: none; }
+        
         .drag-handle { color: #d4b2a7; font-size: 1.4rem; cursor: grab; }
         .show-content { display: flex; align-items: center; gap: 12px; font-weight: 500; }
 
@@ -126,11 +130,17 @@
         .polaroid-slot span.emoji { font-size: 1.5rem; margin-top: 25px; }
         .polaroid-slot span.label { position: absolute; bottom: 4px; font-size: 0.7rem; font-weight: bold; color: #a39391; }
         
+        /* STOPS EMOJIS AND TEXT FROM BLOCKING DROPS */
+        .polaroid-slot span { pointer-events: none; }
+        
         .photo-pool { display: flex; flex-direction: column; gap: 12px; width: 50%; justify-content: center; }
         .draggable-photo {
             width: 100%; height: 85px; background-size: cover; background-position: center; border-radius: 6px; cursor: grab;
             border: 3px solid white; box-shadow: 0 4px 8px rgba(0,0,0,0.1); image-rendering: -webkit-optimize-contrast; image-rendering: pixelated;
-            touch-action: none; /* Mobile scroll fix */
+            touch-action: none;
+            -webkit-touch-callout: none; /* Stops text selection */
+            -webkit-user-select: none;
+            user-select: none;
         }
         .polaroid-slot .draggable-photo { width: 100%; height: 75px; position: absolute; top: 8px; left: 0; right: 0; margin: auto; max-width: 90%; z-index: 2; border-width: 2px;}
 
@@ -182,14 +192,12 @@
 
 <div class="wrapped-container">
 
-    <!-- CARD 0: TITLE -->
     <div class="card active" id="card-0">
-        <h1>Welcome to Katify Wrapped</h1>
-        <p>A little look back at the past 365 days of us. Ready?</p>
+        <h1>Welcome to Your Katify Wrapped!</h1>
+        <p>Ready to see your year in review?</p>
         <button class="btn" onclick="nextCard()">Let's go ❤️</button>
     </div>
 
-    <!-- CARD 1: WATCHLIST (DRAG & DROP) -->
     <div class="card" id="card-1">
         <h2>Our Watchlist 📺</h2>
         <p>We've watched a lot of shows together this year. Drag these to rank your top 3 at the very top!</p>
@@ -197,7 +205,6 @@
         <button class="btn" id="show-submit-btn" onclick="submitShowRanking()">Lock in Top 3</button>
     </div>
 
-    <!-- CARD 2: GUESS WHO -->
     <div class="card" id="card-2">
         <h2>Guess Who 🤔</h2>
         <p>No, we aren't talking about the bathroom incident...</p>
@@ -206,7 +213,6 @@
         </div>
     </div>
 
-    <!-- CARD 3: FAVORITE DATES -->
     <div class="card" id="card-3">
         <h2>My Top 3 Dates 🗺️</h2>
         <p>We've been on some amazing dates, but 3 of these hold a special place in my heart. Can you guess them?</p>
@@ -214,7 +220,6 @@
         <button class="btn" id="date-submit-btn" disabled onclick="submitDateGuesses()">Lock it in (0/3)</button>
     </div>
 
-    <!-- CARD 4: STATS -->
     <div class="card" id="card-4">
         <h2>By The Numbers 📈</h2>
         <p>Let's look at those stats...</p>
@@ -227,7 +232,6 @@
         <button class="btn" id="stats-next-btn" style="display:none;" onclick="nextCard()">Keep Going ✨</button>
     </div>
 
-    <!-- CARD 5: VACATIONS -->
     <div class="card" id="card-5">
         <h2>Our Getaways ✈️</h2>
         <p>"Santa Cruz is basically just Hawaii at home, amiright?" - Kat</p>
@@ -243,10 +247,9 @@
         <button class="btn" onclick="nextCard()">Next Page</button>
     </div>
 
-    <!-- CARD 6: SEASONS DRAG & DROP -->
     <div class="card" id="card-6">
         <h2>Through All Seasons</h2>
-        <p id="seasons-instructions">Match our memories to the right time of year by dragging them into the frames!</p>
+        <p id="seasons-instructions">Match our memories to the right time of year by dragging them into the frames! Hint: Hold for longer on mobile</p>
         <div class="seasons-game">
             <div id="seasons-feedback">Not quite right... Try switching some!</div>
             <div class="polaroid-slots">
@@ -255,17 +258,18 @@
                 <div class="polaroid-slot" data-season="summer"><span class="emoji">☀️</span><span class="label">SUMMER</span></div>
                 <div class="polaroid-slot" data-season="fall"><span class="emoji">🍁</span><span class="label">FALL</span></div>
             </div>
+            
             <div class="photo-pool" id="photo-pool">
                 <div class="draggable-photo" draggable="true" id="img-spring" data-season="spring" style="background-image: url('photos/spring.jpg');"></div>
                 <div class="draggable-photo" draggable="true" id="img-winter" data-season="winter" style="background-image: url('photos/winter.jpg');"></div>
                 <div class="draggable-photo" draggable="true" id="img-fall" data-season="fall" style="background-image: url('photos/fall.jpg');"></div>
                 <div class="draggable-photo" draggable="true" id="img-summer" data-season="summer" style="background-image: url('photos/summer.jpg');"></div>
+                
+                <button class="btn" id="seasons-next-btn" style="display:none; margin: 0; width: 100%;" onclick="nextCard()">Continue ❤️</button>
             </div>
         </div>
-        <button class="btn" id="seasons-next-btn" style="display:none;" onclick="nextCard()">Continue ❤️</button>
     </div>
 
-    <!-- CARD 7: TIMELINE -->
     <div class="card" id="card-7">
         <h2>How It Unfolded 📅</h2>
         <div class="timeline-box" id="timeline-box"></div>
@@ -273,7 +277,6 @@
         <button class="btn" id="timeline-next-btn" style="display:none; margin-top:15px;" onclick="nextCard()">Our Lover Type</button>
     </div>
 
-    <!-- CARD 8: FINALE -->
     <div class="card" id="card-8">
         <div class="aura-card">
             <div class="aura-title" id="aura-title">What Type of Lover You Are?</div>
@@ -283,7 +286,6 @@
         <button class="btn" id="finale-next-btn" style="display:none; margin-top:20px;" onclick="nextCard()">See Our Wrapped Summary</button>
     </div>
 
-    <!-- CARD 9: WRAPPED SUMMARY -->
     <div class="card" id="card-9">
         <div class="summary-wrapper">
             <h2 style="color: white; margin-bottom: 5px;">2026 Wrapped</h2>
@@ -296,11 +298,11 @@
                 </div>
                 <div class="summary-item">
                     <span class="sum-label">Top Shows</span>
-                    <span class="sum-val" id="summary-top-shows"></span> <!-- Updated dynamically -->
+                    <span class="sum-val" id="summary-top-shows"></span>
                 </div>
                 <div class="summary-item summary-item-wide">
                     <span class="sum-label" style="margin:0;">Days Together</span>
-                    <span class="sum-val" id="summary-days-together" style="font-size: 1.5rem; color: #fcded7;"></span> <!-- Updated dynamically -->
+                    <span class="sum-val" id="summary-days-together" style="font-size: 1.5rem; color: #fcded7;"></span>
                 </div>
                 <div class="summary-item summary-item-wide">
                     <span class="sum-label" style="margin:0;">Lover Type</span>
@@ -319,7 +321,6 @@
     // --- SECURE PASSWORD LOCK ---
     const userGuess = prompt("Enter the secret key to unlock our Wrapped ❤️:");
 
-    // hash
     const checkString = userGuess ? btoa(userGuess.trim()) : "";
 
     if (checkString !== "SGlUaGVyZUxvdmV5IQ==") {
@@ -338,7 +339,6 @@
     // --- INTERNAL CALENDAR CALCULATION ---
     const anniversaryDate = new Date('2026-01-15T00:00:00');
     const today = new Date();
-    // Normalize times to midnight for precise date counting
     anniversaryDate.setHours(0,0,0,0);
     today.setHours(0,0,0,0);
     const timeDiff = today.getTime() - anniversaryDate.getTime();
@@ -359,7 +359,6 @@
             if (currentCard === 7) { startTimeline(); }
             if (currentCard === 8) { startAuraFinale(); }
             if (currentCard === 9) { 
-                // Populate the final dynamic summary fields
                 document.getElementById('summary-top-shows').innerHTML = rankedShows.join('<br>');
                 document.getElementById('summary-days-together').innerText = `${calculatedDays} Days`;
             }
@@ -385,19 +384,36 @@
         const draggables = document.querySelectorAll('.draggable-show');
 
         draggables.forEach(draggable => {
-            draggable.addEventListener('dragstart', () => { draggable.classList.add('dragging'); });
-            draggable.addEventListener('dragend', () => { draggable.classList.remove('dragging'); updateShowBadges(); });
+            draggable.addEventListener('dragstart', (e) => { 
+                draggable.classList.add('dragging'); 
+                e.dataTransfer.setData('text/plain', 'show-drag');
+            });
+            draggable.addEventListener('dragend', () => { 
+                draggable.classList.remove('dragging'); 
+                updateShowBadges(); 
+            });
         });
+
+        container.addEventListener('dragenter', e => { e.preventDefault(); });
 
         container.addEventListener('dragover', e => {
             e.preventDefault();
-            const afterElement = getDragAfterElement(container, e.clientY);
+            const clientY = e.clientY || (e.touches ? e.touches[0].clientY : 0);
+            
+            const afterElement = getDragAfterElement(container, clientY);
             const draggable = document.querySelector('.dragging');
-            if (afterElement == null) {
-                container.appendChild(draggable);
-            } else {
-                container.insertBefore(draggable, afterElement);
+            if (draggable) {
+                if (afterElement == null) {
+                    container.appendChild(draggable);
+                } else {
+                    container.insertBefore(draggable, afterElement);
+                }
             }
+        });
+
+        container.addEventListener('drop', e => {
+            e.preventDefault();
+            updateShowBadges();
         });
 
         updateShowBadges();
@@ -547,7 +563,6 @@
     // --- CARD 4: STATS ---
     function startStatsCounter() {
         setTimeout(() => {
-            // Animates up to our internally calculated days together value
             animateValue("stat-days-together", 0, calculatedDays, 1400); 
             animateValue("stat-butt-dials", 0, 5, 1400);
             animateValue("stat-kisses", 0, 1000, 1400); 
@@ -562,7 +577,6 @@
             obj.innerHTML = Math.floor(progress * (end - start) + start);
             if (progress < 1) { window.requestAnimationFrame(step); }
             else { 
-                // Do not append "+" symbol for exact calendar day counters
                 obj.innerHTML = end + (id === 'stat-days-together' ? '' : '+'); 
                 if(last) document.getElementById('stats-next-btn').style.display = "block"; 
             }
@@ -592,51 +606,66 @@
         const pool = document.getElementById('photo-pool');
         const feedback = document.getElementById('seasons-feedback');
 
+        function allowDrop(e) { e.preventDefault(); }
+
         photos.forEach(photo => {
             photo.removeEventListener('dragstart', photoDragStart); 
             photo.addEventListener('dragstart', photoDragStart); 
         });
 
         slots.forEach(slot => {
-            slot.removeEventListener('dragover', slotDragOver);
-            slot.addEventListener('dragover', slotDragOver);
+            slot.removeEventListener('dragenter', allowDrop);
+            slot.addEventListener('dragenter', allowDrop);
+            slot.removeEventListener('dragover', allowDrop);
+            slot.addEventListener('dragover', allowDrop);
+            
             slot.removeEventListener('drop', slotDrop);
             slot.addEventListener('drop', slotDrop);
         });
 
-        pool.removeEventListener('dragover', poolDragOver);
-        pool.addEventListener('dragover', poolDragOver);
+        pool.removeEventListener('dragenter', allowDrop);
+        pool.addEventListener('dragenter', allowDrop);
+        pool.removeEventListener('dragover', allowDrop);
+        pool.addEventListener('dragover', allowDrop);
+        
         pool.removeEventListener('drop', poolDrop);
         pool.addEventListener('drop', poolDrop);
 
         function photoDragStart(e) { 
             e.dataTransfer.setData('text/plain', e.target.id); 
-            // Helps mobile safari lock onto the item data securely
             if(e.dataTransfer.setDragImage) {
                 e.dataTransfer.setDragImage(e.target, 0, 0);
             }
         }
-        function slotDragOver(e) { e.preventDefault(); } 
         
         function slotDrop(e) {
             e.preventDefault();
             const id = e.dataTransfer.getData('text');
+            if (!id || id === 'show-drag') return;
+
             const photo = document.getElementById(id);
-            if(this.querySelectorAll('.draggable-photo').length === 0) {
-                this.appendChild(photo);
+            if (!photo) return;
+            
+            const targetSlot = e.target.closest('.polaroid-slot') || this;
+            
+            if(targetSlot.querySelectorAll('.draggable-photo').length === 0) {
+                targetSlot.appendChild(photo);
                 feedback.classList.remove('show'); 
                 checkSeasonsWin();
             }
         }
         
-        function poolDragOver(e) { e.preventDefault(); }
         function poolDrop(e) {
             e.preventDefault();
             const id = e.dataTransfer.getData('text');
+            if (!id || id === 'show-drag') return;
+
             const photo = document.getElementById(id);
-            this.appendChild(photo);
-            feedback.classList.remove('show'); 
-            checkSeasonsWin();
+            if (photo) {
+                this.appendChild(photo);
+                feedback.classList.remove('show'); 
+                checkSeasonsWin();
+            }
         }
     }
 
@@ -725,9 +754,8 @@
         canvas.toBlob(async (blob) => {
             const file = new File([blob], "Katify-Wrapped.png", { type: "image/png" });
             if (navigator.share && navigator.canShare({ files: [file] })) {
-                await navigator.share({ files: [file], title: 'My Wrapped' });
+                await navigator.share({ files: [file], title: 'Here is my Katify Wrapped!' });
             } else {
-                // Fallback: Just trigger the download
                 const link = document.createElement('a');
                 link.href = URL.createObjectURL(blob);
                 link.download = 'Katify-Wrapped.png';
