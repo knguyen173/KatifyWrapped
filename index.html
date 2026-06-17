@@ -294,6 +294,23 @@
 </div>
 
 <script>
+    // --- SECURE PASSWORD LOCK ---
+    const userGuess = prompt("Enter the secret key to unlock our Wrapped ❤️:");
+
+    // hash
+    const checkString = userGuess ? btoa(userGuess.trim()) : "";
+
+    if (checkString !== "SGlUaGVyZUxvdmV5IQ==") {
+        alert("Incorrect password!");
+        document.body.innerHTML = `
+            <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100vh; text-align:center; background:#fcf8f2; color:#8c6b63; font-family:sans-serif; padding:20px;">
+                <h1>Access Denied 🔒</h1>
+                <p style="color:#70605d; margin-top:10px;">This wrapped summary is private.</p>
+            </div>
+        `;
+        throw new Error("Access Denied: Incorrect Password");
+    }
+
     let currentCard = 0; const totalCards = 10; 
 
     // --- INTERNAL CALENDAR CALCULATION ---
