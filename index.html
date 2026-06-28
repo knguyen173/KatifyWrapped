@@ -167,7 +167,7 @@
         .big-reveal { font-size: 1.8rem; font-weight: 300; color: #8c6b63; opacity: 0; transform: scale(0.8); transition: all 1s ease 0.5s; margin-top: 20px; text-align: center; }
         .big-reveal.visible { opacity: 1; transform: scale(1); }
 
-        /* Card 8: Spotify Aura Finale */
+        /* Card 8: Aura Finale */
         .aura-card { width: 100%; height: 260px; background: linear-gradient(135deg, #fcded7 0%, #f7effd 50%, #e3f0fe 100%); border-radius: 25px; filter: blur(0px); display: flex; flex-direction: column; justify-content: center; align-items: center; animation: auraWave 8s ease infinite alternate; position: relative; margin-bottom: 25px; box-shadow: inset 0 0 40px rgba(255,255,255,0.6); }
         @keyframes auraWave { 0% { background-position: 0% 50%; } 100% { background-position: 100% 50%; } }
         .aura-title { font-size: 1.4rem; font-weight: bold; letter-spacing: 1px; color: #5a4b48; text-transform: uppercase; }
@@ -226,7 +226,7 @@
         <div class="stats-container">
             <div class="stat-row"><span class="stat-label">Days Together 📅</span><span class="stat-value" id="stat-days-together">0</span></div>
             <div class="stat-row"><span class="stat-label">Butt Dials 📱</span><span class="stat-value" id="stat-butt-dials">0</span></div>
-            <div class="stat-row"><span class="stat-label">Kisses Shared 😘</span><span class="stat-value" id="stat-kisses">0</span></div>
+            <div class="stat-row"><span class="stat-label">Hikes Climbed 🚶</span><span class="stat-value" id="stat-hikes">0</span></div>
             <div class="stat-row"><span class="stat-label">Official Dates 🌹</span><span class="stat-value" id="stat-dates">0</span></div>
         </div>
         <button class="btn" id="stats-next-btn" style="display:none;" onclick="nextCard()">Keep Going ✨</button>
@@ -366,7 +366,7 @@
     }
 
     // --- CARD 1: DRAG & DROP SHOW RANKING ---
-    const showsData = ["Dungeon Meshi", "Ne Zha", "JJK", "Yip Man", "Frieren"];
+    const showsData = ["Hercules", "Ne Zha", "Wild Robot", "Yip Man", "Emperor's New Groove"];
     let rankedShows = [];
 
     function initShowRanking() {
@@ -564,8 +564,8 @@
     function startStatsCounter() {
         setTimeout(() => {
             animateValue("stat-days-together", 0, calculatedDays, 1400); 
-            animateValue("stat-butt-dials", 0, 5, 1400);
-            animateValue("stat-kisses", 0, 1000, 1400); 
+            animateValue("stat-butt-dials", 0, 3, 1400);
+            animateValue("stat-hikes", 0, 6, 1400); 
             animateValue("stat-dates", 0, 20, 1400, true);
         }, 1000);
     }
@@ -577,7 +577,8 @@
             obj.innerHTML = Math.floor(progress * (end - start) + start);
             if (progress < 1) { window.requestAnimationFrame(step); }
             else { 
-                obj.innerHTML = end + (id === 'stat-days-together' ? '' : '+'); 
+                // Only sets the pure number now
+                obj.innerHTML = end; 
                 if(last) document.getElementById('stats-next-btn').style.display = "block"; 
             }
         };
