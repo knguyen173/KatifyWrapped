@@ -294,7 +294,7 @@
             <div class="summary-grid">
                 <div class="summary-item">
                     <span class="sum-label">Top Dates</span>
-                    <span class="sum-val">Santa Cruz<br>Valentine's<br>Photobooth</span>
+                    <span class="sum-val">White Day<br>Valentine's<br>Photobooth</span>
                 </div>
                 <div class="summary-item">
                     <span class="sum-label">Top Shows</span>
@@ -523,7 +523,7 @@
     }
 
     // --- CARD 3: DATE QUIZ ---
-    const datesData = [{ name: "Santa Cruz Date", top: true }, { name: "Valentine's Date", top: true }, { name: "The Photobooth Date", top: true }, { name: "Cherry Blossom Festival", top: false }, { name: "Sierra Vista Date", top: false }, { name: "Pickleball Date", top: false }];
+    const datesData = [{ name: "White Day Date", top: true }, { name: "Valentine's Date", top: true }, { name: "The Photobooth Date", top: true }, { name: "Cherry Blossom Festival", top: false }, { name: "Sierra Vista Date", top: false }, { name: "Pickleball Date", top: false }];
     let selectedDates = [];
     
     function initDateQuiz() {
@@ -565,7 +565,7 @@
         setTimeout(() => {
             animateValue("stat-days-together", 0, calculatedDays, 1400); 
             animateValue("stat-butt-dials", 0, 3, 1400);
-            animateValue("stat-hikes", 0, 6, 1400); 
+            animateValue("stat-hikes", 0, 8, 1400); 
             animateValue("stat-dates", 0, 20, 1400, true);
         }, 1000);
     }
@@ -700,12 +700,15 @@
 
     // --- CARD 7: TIMELINE ---
     const timelineData = [
+        { d: "Nov 19, 2025", t: "We first talked 📱" },
+        { d: "Dec 15, 2025", t: "Baekjong \"Date\" 🍖" },
         { d: "Jan 12, 2026", t: "He first confessed his feelings 🫣" },
         { d: "Jan 14, 2026", t: "Our very first kiss 💋" },
         { d: "Jan 15, 2026", t: "Officially together! 👩‍❤️‍👨" },
         { d: "Jan 19, 2026", t: "Our first 'I love you's ❤️" },
         { d: "Feb 15, 2026", t: "The \"Valentines\" Date 🗺️" },
         { d: "Apr 21, 2026", t: "Celebrating his birthday 🎂" },
+        { d: "Jul 1, 2026", t: "Hawaii! 🪿" },
         { d: "Sep 4, 2026", t: "Celebrating my birthday 🎈" },
         { d: "Jan 15, 2027", t: "One Year Anniversary " }
     ];
