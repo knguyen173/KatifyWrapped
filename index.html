@@ -196,7 +196,6 @@
 
     <div class="card" id="card-2">
         <h2>Guess Who 🤔</h2>
-        <p>Who am I describing?</p>
         <div class="quiz-container">
             <div id="guess-who-content"></div>
         </div>
@@ -280,7 +279,7 @@
                     <span class="sum-val">White Day<br>Valentine's<br>Photobooth</span>
                 </div>
                 <div class="summary-item">
-                    <span class="sum-label">Top Shows</span>
+                    <span class="sum-label">Top Movies</span>
                     <span class="sum-val" id="summary-top-shows"></span>
                 </div>
                 <div class="summary-item summary-item-wide">
@@ -349,7 +348,7 @@
     }
 
     // --- CARD 1: DRAG & DROP SHOW RANKING ---
-    const showsData = ["Hercules", "Project Hail Mary", "Wild Robot", "The Martian", "Emperor's New Groove"];
+    const showsData = ["Hercules", "Project Hail Mary", "Wild Robot", "The Martian", "Emperor's New Groove", "The Odyssey", "Spiderman: Brand New Day"];
     let rankedShows = [];
 
     function initShowRanking() {
@@ -753,15 +752,17 @@
     const timelineData = [
         { d: "Nov 19, 2025", t: "We first talked 📱" },
         { d: "Dec 15, 2025", t: "Baekjong \"Date\" 🍖" },
-        { d: "Jan 12, 2026", t: "He first confessed his feelings 🫣" },
+        { d: "Jan 12, 2026", t: "He confessed his feelings 🫣" },
         { d: "Jan 14, 2026", t: "Our very first kiss 💋" },
         { d: "Jan 15, 2026", t: "Officially together! 👩‍❤️‍👨" },
         { d: "Jan 19, 2026", t: "Our first 'I love you's ❤️" },
         { d: "Feb 15, 2026", t: "The \"Valentines\" Date 🗺️" },
-        { d: "Apr 21, 2026", t: "Celebrating his birthday 🎂" },
-        { d: "Jul 1, 2026", t: "Hawaii! 🌺" },
-        { d: "Sep 4, 2026", t: "Celebrating my birthday 🎈" },
-        { d: "Jan 15, 2027", t: "One Year Anniversary " }
+        { d: "Mar 19-22, 2026", t: "Santa Cruz! 🏖️" },
+        { d: "Apr 21, 2026", t: "Celebrating Mnason's birthday 🎈" },
+        { d: "Jul 1 - 7, 2026", t: "Hawaii! 🌺" },
+        { d: "Jul 21, 2026", t: "Mnason started at Tesla 🚗" },
+        { d: "Sep 4, 2026", t: "Celebrating Kat's birthday 🎂" },
+        { d: "Jan 15, 2027", t: "One Year Anniversary 1️⃣" }
     ];
     function startTimeline() {
         const box = document.getElementById('timeline-box');
