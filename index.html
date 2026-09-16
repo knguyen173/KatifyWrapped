@@ -68,7 +68,7 @@
             cursor: grab; display: flex; justify-content: space-between; align-items: center;
             font-size: 0.95rem; transition: transform 0.2s, box-shadow 0.2s;
             touch-action: none; 
-            -webkit-touch-callout: none; /* Stops the blue text selection popup */
+            -webkit-touch-callout: none;
             -webkit-user-select: none;
             user-select: none;
         }
@@ -78,13 +78,12 @@
             transform: scale(1.03); box-shadow: 0 5px 15px rgba(212, 178, 167, 0.4); z-index: 10;
         }
         
-        /* Stop the inner text/handle from blocking the drag calculations */
         .show-content, .drag-handle { pointer-events: none; }
         
         .drag-handle { color: #d4b2a7; font-size: 1.4rem; cursor: grab; }
         .show-content { display: flex; align-items: center; gap: 12px; font-weight: 500; }
 
-        /* Card 2: Guess Who */
+        /* Quiz Shared Styles (Card 2 & Card 5) */
         .quiz-container { width: 100%; margin-top: 10px; position: relative;}
         .quiz-question { font-size: 1.1rem; font-weight: bold; margin-bottom: 15px; color: #614a45; }
         .quiz-options { display: flex; gap: 15px; justify-content: center; margin-bottom: 20px; }
@@ -101,27 +100,18 @@
         .stat-row { display: flex; justify-content: space-between; align-items: center; padding: 15px; background: #faf5f2; border-radius: 15px; border-left: 4px solid #d4b2a7; }
         .stat-value { font-size: 1.4rem; font-weight: bold; color: #8c6b63; width: 80px; text-align: right; }
 
-        /* Card 5: Plane Flight Animation */
-        .map-area { width: 100%; height: 220px; position: relative; background: #eef5f8; border-radius: 15px; overflow: hidden; margin: 20px 0; border: 1px dashed #b2c8d4; }
-        .map-dot { position: absolute; width: 10px; height: 10px; background: #8c6b63; border-radius: 50%; z-index: 2;}
-        .dot-ca { top: 40px; right: 40px; }
-        .dot-hi { bottom: 50px; left: 50px; }
-        .label-ca { position: absolute; top: 20px; right: 25px; font-size: 0.8rem; font-weight: bold; z-index: 3;}
-        .label-hi { position: absolute; bottom: 30px; left: 35px; font-size: 0.8rem; font-weight: bold; z-index: 3;}
-        
-        .plane { position: absolute; font-size: 1.6rem; transform: rotate(-135deg); top: 32px; right: 32px; opacity: 0; transition: all 3.5s ease-out; z-index: 5;}
-        .plane.fly { opacity: 1; top: 110px; right: 310px; }
-        
-        .flight-line-container {
-            position: absolute; width: 290px; height: 140px; top: 40px; right: 40px;
-            overflow: hidden; pointer-events: none; transform-origin: top right; transform: rotate(25deg);
+        /* Card 5: Cartoon Couples Quiz Styles */
+        .couple-image-frame {
+            width: 100%;
+            max-width: 280px;
+            height: 180px;
+            margin: 0 auto 15px auto;
+            border-radius: 15px;
+            border: 3px solid white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            background-size: cover;
+            background-position: center;
         }
-        .flight-line {
-            position: absolute; top: 0; right: 0; width: 100%; height: 100%;
-            border-bottom: 2px dashed #d4b2a7; border-left: 2px dashed #d4b2a7;
-            border-radius: 0 0 0 220px; opacity: 0; transition: opacity 3.5s linear;
-        }
-        .flight-line.drawn { opacity: 1; }
 
         /* Card 6: Seasons Drag & Drop */
         .seasons-game { display: flex; width: 100%; gap: 15px; margin-top: 15px; position: relative; }
@@ -130,7 +120,6 @@
         .polaroid-slot span.emoji { font-size: 1.5rem; margin-top: 25px; }
         .polaroid-slot span.label { position: absolute; bottom: 4px; font-size: 0.7rem; font-weight: bold; color: #a39391; }
         
-        /* STOPS EMOJIS AND TEXT FROM BLOCKING DROPS */
         .polaroid-slot span { pointer-events: none; }
         
         .photo-pool { display: flex; flex-direction: column; gap: 12px; width: 50%; justify-content: center; }
@@ -138,7 +127,7 @@
             width: 100%; height: 85px; background-size: cover; background-position: center; border-radius: 6px; cursor: grab;
             border: 3px solid white; box-shadow: 0 4px 8px rgba(0,0,0,0.1); image-rendering: -webkit-optimize-contrast; image-rendering: pixelated;
             touch-action: none;
-            -webkit-touch-callout: none; /* Stops text selection */
+            -webkit-touch-callout: none;
             -webkit-user-select: none;
             user-select: none;
         }
@@ -232,19 +221,13 @@
         <button class="btn" id="stats-next-btn" style="display:none;" onclick="nextCard()">Keep Going ✨</button>
     </div>
 
+    <!-- CARD 5: CARTOON COUPLES QUIZ -->
     <div class="card" id="card-5">
-        <h2>Our Getaways ✈️</h2>
-        <p>"Santa Cruz is basically just Hawaii at home, amiright?" - Kat</p>
-        <div class="map-area">
-            <div class="map-dot dot-ca"></div><div class="label-ca">California</div>
-            <div class="map-dot dot-hi"></div><div class="label-hi">Hawaii</div>
-            <div class="flight-line-container">
-                <div class="flight-line" id="flight-path"></div>
-            </div>
-            <div class="plane" id="travel-plane">✈️</div>
+        <h2>Cartoon Couples Quiz 💞</h2>
+        <p>We make a pretty cute duo, but can you name these cuties?</p>
+        <div class="quiz-container">
+            <div id="cartoon-quiz-content"></div>
         </div>
-        <h3 style="color:#8c6b63; font-weight:400; margin-top:10px;" id="vacation-msg">&nbsp;</h3>
-        <button class="btn" onclick="nextCard()">Next Page</button>
     </div>
 
     <div class="card" id="card-6">
@@ -354,7 +337,7 @@
             if (currentCard === 2) { initGuessWho(); }
             if (currentCard === 3) { initDateQuiz(); }
             if (currentCard === 4) { startStatsCounter(); }
-            if (currentCard === 5) { startFlightAnimation(); }
+            if (currentCard === 5) { initCartoonQuiz(); }
             if (currentCard === 6) { initSeasonsGame(); }
             if (currentCard === 7) { startTimeline(); }
             if (currentCard === 8) { startAuraFinale(); }
@@ -577,7 +560,6 @@
             obj.innerHTML = Math.floor(progress * (end - start) + start);
             if (progress < 1) { window.requestAnimationFrame(step); }
             else { 
-                // Only sets the pure number now
                 obj.innerHTML = end; 
                 if(last) document.getElementById('stats-next-btn').style.display = "block"; 
             }
@@ -585,19 +567,88 @@
         window.requestAnimationFrame(step);
     }
 
-    // --- CARD 5: FLIGHT ANIMATION ---
-    function startFlightAnimation() {
-        document.getElementById('travel-plane').classList.remove('fly');
-        document.getElementById('flight-path').classList.remove('drawn');
-        document.getElementById('vacation-msg').innerText = " ";
+    // --- CARD 5: CARTOON COUPLES QUIZ DATA & LOGIC ---
+    const cartoonCouplesData = [
+        {
+            img: 'photos/gr-m.png',
+            q: "Who are these dogs? hehe, her reactions are soooo funny",
+            options: ["Golden Retriever & Maltese", "Jojo & Mimi"],
+            answer: "Golden Retriever & Maltese"
+        },
+        {
+            img: 'photos/suni-luna.png',
+            q: "What about this cat-dog duo?",
+            options: ["Freddie & Lizzie", "Suni & Luna"],
+            answer: "Suni & Luna"
+        },
+        {
+            img: 'photos/capy-bunni.png',
+            q: "Wait, they aren't being executed, how am I supposed to know?",
+            options: ["Capy & Bunni", "Banana & Bowie"],
+            answer: "Capy & Bunni"
+        },
+        {
+            img: 'photos/nub-cats(1).png',
+            q: "Blehhhhh hehehe",
+            options: ["Blue & Pink", "Nub Cats"],
+            answer: "Nub Cats"
+        }
+    ];
 
-        setTimeout(() => { 
-            document.getElementById('travel-plane').classList.add('fly'); 
-            document.getElementById('flight-path').classList.add('drawn'); 
-        }, 600);
-        setTimeout(() => { 
-            document.getElementById('vacation-msg').innerText = "I love you worldwide 🌎"; 
-        }, 3800);
+    let currentCartoonRound = 0;
+    let cartoonScore = 0;
+
+    function initCartoonQuiz() {
+        currentCartoonRound = 0;
+        cartoonScore = 0;
+        showCartoonQuestion();
+    }
+
+    function showCartoonQuestion() {
+        let data = cartoonCouplesData[currentCartoonRound];
+        document.getElementById('cartoon-quiz-content').innerHTML = `
+            <div class="couple-image-frame" style="background-image: url('${data.img}');"></div>
+            <div class="quiz-question">${data.q}</div>
+            <div class="quiz-options">
+                <button class="quiz-opt" onclick="selectCartoon(this, '${data.options[0]}')">${data.options[0]}</button>
+                <button class="quiz-opt" onclick="selectCartoon(this, '${data.options[1]}')">${data.options[1]}</button>
+            </div>`;
+    }
+
+    function selectCartoon(element, choice) {
+        let opts = document.querySelectorAll('#cartoon-quiz-content .quiz-opt');
+        let correctAnswer = cartoonCouplesData[currentCartoonRound].answer;
+        let correctElement = Array.from(opts).find(o => o.innerText === correctAnswer);
+
+        if (choice === correctAnswer) {
+            element.classList.add('correct');
+            cartoonScore++;
+        } else {
+            element.classList.add('wrong');
+            if (correctElement) correctElement.classList.add('correct');
+        }
+
+        opts.forEach(o => o.disabled = true);
+
+        setTimeout(() => {
+            if (currentCartoonRound < cartoonCouplesData.length - 1) {
+                currentCartoonRound++;
+                showCartoonQuestion();
+            } else {
+                showCartoonResults();
+            }
+        }, 1600);
+    }
+
+    function showCartoonResults() {
+        document.getElementById('cartoon-quiz-content').innerHTML = `
+            <div class="quiz-question">You scored ${cartoonScore}/${cartoonCouplesData.length}! 🎉</div>
+            <p style="font-size: 0.95rem; margin-bottom: 15px;">Still not as iconic as us though ❤️</p>
+            <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+                <button class="btn" style="margin-top: 10px; background-color: #e0d5d2; color: #70605d;" onclick="initCartoonQuiz()">Retake Quiz</button>
+                <button class="btn" style="margin-top: 10px;" onclick="nextCard()">Next Memory ❤️</button>
+            </div>
+        `;
     }
 
     // --- CARD 6: SEASONS DRAG & DROP ---
